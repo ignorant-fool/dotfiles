@@ -6,7 +6,6 @@ if type -q exa
     alias llt "ll --tree --level=2"
 end 
 
-
 # set custom ls colours
 # https://the.exa.website/docs/colour-themes
 set -Ux LSCOLORS gxfxbEaEBxxEhEhBaDaCaD
@@ -15,7 +14,11 @@ set -Ux EXA_COLORS "di=36:da=32"
 
 set -gx EDITOR vim
 
-pyenv init - | source
+# for gcc and g++  
+set -gx LDFLAGS "-L/opt/homebrew/opt/llvm/lib,-L/opt/homebrew/opt/llvm/lib/c++ -Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++"
+set -gx CPPFLAGS "-I/opt/homebrew/opt/llvm/include"
+
+
 
 # below stolen from DevAsLife <3 many thanks.
 function _peco_change_directory
@@ -63,7 +66,7 @@ function fish_user_key_bindings
 end
 
 
-
+pyenv init - | source
 
 
 
