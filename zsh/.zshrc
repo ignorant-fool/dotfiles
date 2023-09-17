@@ -1,3 +1,6 @@
+plugins=(virtualenv)
+
+
 neofetch
 
 #### Taken from DevAsLife (many thanks!)
@@ -16,9 +19,20 @@ export EDITOR=vim
 alias icat="kitty +kitten icat --align left"
 
 
-#### Taken from twny (many thanks!!)
+#### Taken from virtualenv plugin
+function virtualenv_prompt_info(){
+  [[ -n ${VIRTUAL_ENV} ]] || return
+  echo "${ZSH_THEME_VIRTUALENV_PREFIX=[}${VIRTUAL_ENV:t:gs/%/%%}${ZSH_THEME_VIRTUALENV_SUFFIX=]} "
+}
+
+# disables prompt mangling in virtual_env/bin/activate
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+####
+
+
+#### Adapted from twny (many thanks!!)
 set_rainbow_prompt() {
-    local input="$(print -P "hbutton@%m %~ $") "
+    local input="$(print -P "$(virtualenv_prompt_info)hbutton@%m %~ $") "
     local prompt_string=""
     local color_idx=1
     local color
