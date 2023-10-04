@@ -29,10 +29,16 @@ function virtualenv_prompt_info(){
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 ####
 
+#### Taken from reinvanoyen's gist on git branch in prompt
+function parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1] /p'
+}
+###
+
 
 #### Adapted from twny (many thanks!!)
 set_rainbow_prompt() {
-    local input="$(print -P "$(virtualenv_prompt_info)hbutton@%m %~ $") "
+    local input="$(print -P "$(virtualenv_prompt_info)hbutton@%m %~ $(parse_git_branch)$") "
     local prompt_string=""
     local color_idx=1
     local color
