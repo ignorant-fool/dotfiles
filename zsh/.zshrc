@@ -29,16 +29,38 @@ function virtualenv_prompt_info(){
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 ####
 
-#### Taken from reinvanoyen's gist on git branch in prompt
-function parse_git_branch() {
-    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1] /p'
+#### Taken from Sal Ferrarello https://salferrarello.com/zsh-git-status-prompt/
+# Autoload zsh add-zsh-hook and vcs_info functions (-U autoload w/o substition, -z use zsh style)
+autoload -Uz add-zsh-hook vcs_info
+# Enable substitution in the prompt.
+setopt prompt_subst
+# Run vcs_info just before a prompt is displayed (precmd)
+add-zsh-hook precmd vcs_info
+# add ${vcs_info_msg_0} to the prompt
+
+# Enable checking for (un)staged changes, enabling use of %u and %c
+zstyle ':vcs_info:*' check-for-changes true
+# Set custom strings for an unstaged vcs repo changes (*) and staged changes (+)
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+# Set the format of the Git information for vcs_info
+zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+
+
+function hb_print_git(){
+  [[ -n ${vcs_info_msg_0_} ]] || return
+  echo "${vcs_info_msg_0_} "
 }
-###
+
+
+####
+
 
 
 #### Adapted from twny (many thanks!!)
 set_rainbow_prompt() {
-    local input="$(print -P "$(virtualenv_prompt_info)hbutton@%m %~ $(parse_git_branch)$") "
+    local input="$(print -P "$(virtualenv_prompt_info)hbutton@%m %~ $(hb_print_git)$") "
     local prompt_string=""
     local color_idx=1
     local color
